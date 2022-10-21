@@ -1,0 +1,13 @@
+.video_list{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 80px 10%;
+}
+
+.list_item{
+    width: 120px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 4px 14px;
+    margin: 20px 16px 0 0;
+}

@@ -1,0 +1,30 @@
+.frames{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.frame_item{
+    width: 200px;
+    height: 160px;
+    margin: 20px 20px 0 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #E0E2E7;
+}
+
+.selected_frame_item{
+    border-color: #50B848;
+}
+
+.frame_item_img{
+    width: 100%;
+    height: calc(100% - 44px);
+    object-fit: cover;
+}
+.frame_item_title{
+    width: 100px;
+    height: 44px;
+    background-color: white;
+    padding: 10px 16px;
+    font-weight: 600;
+}
