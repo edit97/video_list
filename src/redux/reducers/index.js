@@ -1,34 +1,26 @@
 import {CONSTS} from "../constants";
-import {locations} from "../../data/locations";
 
 export const initialState = {
-    shippingList: [],
-    locations: locations,
-    selectedShippingId: null
+    videos: [],
+    savedFrames: []
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case CONSTS.SET_SHIPPING_LIST:
+        case CONSTS.GET_VIDEOS:
             return {
                 ...state,
-                shippingList: action.payload
+                videos: action.payload
             };
-        case CONSTS.UPDATE_SHIPPING_ADDRESS:
-            const newLocation = state.locations.find(i=>i.id === action.payload.locationId);
+        case CONSTS.SAVE_FRAME:
             return {
                 ...state,
-                shippingList: state.shippingList.map(item => {
-                    return item.id === action.payload.shippingId ? {
-                        ...item,
-                        [action.payload.type]:newLocation
-                    }: item
-                })
+                savedFrames: [...action.payload, ...state.savedFrames]
             };
-        case CONSTS.UPDATE_SELECTED_SHIPPING:
+        case CONSTS.GET_SAVE_FRAME:
             return {
                 ...state,
-                selectedShippingId: action.payload
+                savedFrames: action.payload
             };
         default:
             return state;

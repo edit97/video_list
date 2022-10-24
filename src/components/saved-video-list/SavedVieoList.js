@@ -3,44 +3,51 @@ import {connect} from "react-redux";
 import {useEffect, useState} from "react";
 
 //styles
-import './video-list.css';
+import './saved-video-list.css';
 
 //utils
 import {mapStateToProps} from "../../redux/mapStateToProps";
-import {GetVideos} from "../../redux/actions";
+import {GetSaveFrames} from "../../redux/actions";
 
 //Components
-import VideoModal from "../video-modal/VieoModal";
+import MediaModal from "../media-modal/MediaModal";
 
-function VideoList(props) {
-    const {videos, savedFrames} = props
+function SavedVideoList(props) {
+    const {savedFrames} = props
     const [show, setShow] = useState(false);
-    const [activeVideo, setActiveVideo] = useState(false);
+    const [activeImage, setActiveImage] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = (video) => {
+    const handleShow = (image) => {
         setShow(true)
-        setActiveVideo(video)
+        setActiveImage(image)
     };
     useEffect(() => {
-        props.GetVideos()
+        props.GetSaveFrames()
     }, [])
-    console.log(savedFrames, 'savedFrames');
+
     return (
-        <div className="video_list">
-            {
-                !!videos?.length && videos.map(item => {
-                    return <div key={item.id}
-                                onClick={()=>handleShow(item)}
-                                className={'list_item'}>
-                        {item?.name}
-                    </div>
-                })
-            }
-            <VideoModal show={show} handleClose={handleClose} video={activeVideo}/>
+        !!savedFrames?.length &&   <div className="saved_videos">
+            <h3>Saved</h3>
+            <div className="saved_video_list">
+                {
+                    !!savedFrames?.length && savedFrames.map(item => {
+                        return <div key={item.id}
+
+                                    className={'list_item'}>
+                            <img src={item?.path} alt=""
+                                 className={'list_item_img'}
+                                 onClick={()=>handleShow(item?.path)}/>
+                            <span>{item?.file_name}</span>
+                            <span>{item?.frame_number}</span>
+                        </div>
+                    })
+                }
+                <MediaModal show={show} handleClose={handleClose} image={activeImage}/>
+            </div>
         </div>
     );
 }
 
-const mapDispatchToProps = {GetVideos}
-export default connect(mapStateToProps, mapDispatchToProps)(VideoList)
+const mapDispatchToProps = {GetSaveFrames}
+export default connect(mapStateToProps, mapDispatchToProps)(SavedVideoList)

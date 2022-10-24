@@ -1,22 +1,45 @@
-import './App.css';
+//Packages
+import {connect} from "react-redux";
+import {useEffect, useState} from "react";
 
-function App(props) {
-  return (
-    <div className="App">
-        {/*<img src={`${process.env.PUBLIC_URL}/assets/frames/video1/img1.jpg`} alt=""/>*/}
-        Videos list
+//styles
+import './video-list.css';
 
-        {
-            !!videos?.length && videos.map(item => {
-                return <div style={{padding: '20px'}} key={item.id}>{item?.name}</div>
-            })
-        }
-        {/*<video controls={true}*/}
-        {/*       id="video1"*/}
-        {/*       width="420"*/}
-        {/*       src={`${process.env.PUBLIC_URL}/${videos[1].path}`}/>*/}
-    </div>
-  );
+//utils
+import {mapStateToProps} from "../../redux/mapStateToProps";
+import {GetVideos} from "../../redux/actions";
+
+//Components
+import VideoModal from "../video-modal/VieoModal";
+
+function VideoList(props) {
+    const {videos} = props
+    const [show, setShow] = useState(false);
+    const [activeVideo, setActiveVideo] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = (video) => {
+        setShow(true)
+        setActiveVideo(video)
+    };
+    useEffect(() => {
+        props.GetVideos()
+    }, [])
+    return (
+        <div className="video_list">
+            {
+                !!videos?.length && videos.map(item => {
+                    return <div key={item.id}
+                                onClick={()=>handleShow(item)}
+                                className={'list_item'}>
+                        {item?.name}
+                    </div>
+                })
+            }
+            <VideoModal show={show} handleClose={handleClose} video={activeVideo}/>
+        </div>
+    );
 }
 
-export default App;
+const mapDispatchToProps = {GetVideos}
+export default connect(mapStateToProps, mapDispatchToProps)(VideoList)

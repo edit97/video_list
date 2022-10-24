@@ -1,9 +1,9 @@
-.frames{
+.frames {
     display: flex;
     flex-wrap: wrap;
 }
 
-.frame_item{
+.frame_item {
     width: 200px;
     height: 160px;
     margin: 20px 20px 0 0;
@@ -12,19 +12,59 @@
     border: 1px solid #E0E2E7;
 }
 
-.selected_frame_item{
+.selected_frame_item {
     border-color: #50B848;
 }
 
-.frame_item_img{
+.frame_item_img {
     width: 100%;
     height: calc(100% - 44px);
     object-fit: cover;
 }
-.frame_item_title{
-    width: 100px;
+
+.frame_item_title {
+    width: 100%;
     height: 44px;
     background-color: white;
     padding: 10px 16px;
     font-weight: 600;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.frame_item_checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background-color: #E0E2E7;
+    position: relative;
+    cursor: pointer;
+}
+
+.selected_frame_item{
+    background-color: #50B848;
+}
+.selected_frame_item::before {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 7px;
+    width: 2px;
+    background-color: white;
+    content: "";
+    transform: translate(8px, -2px) rotate(-45deg);
+    transform-origin: left bottom;
+}
+
+.selected_frame_item::after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 13px;
+    background-color: white;
+    content: "";
+    transform: translate(9px, -4px) rotate(-45deg);
+    transform-origin: left bottom;
 }

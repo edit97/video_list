@@ -1,37 +1,71 @@
 import {CONSTS} from "../constants";
-import {shippingList} from "../../data/shippingList";
+import {requestFramesFiles, requestSaveFrame, requestSaveFrames, requestVideoFiles} from "../request";
 
-export const GetShippingData = () => {
-    // api call imitation
+export const GetVideos = () => {
+    const requestData = {
+        url: `/videofiles`,
+        method: "GET",
+    };
+
     return dispatch => {
-        return new Promise(resolve => {
-            const randomReqTime = Math.floor(Math.random() * 300 + 700); // [700 - 1000]
-            setTimeout(() => {
-                dispatch({
-                    type: CONSTS.SET_SHIPPING_LIST,
-                    payload: shippingList
-                });
-                resolve()
-            }, randomReqTime)
-        })
-
+        return requestVideoFiles(requestData)
+            .then((res) => {
+                res && dispatch({
+                    type: CONSTS.GET_VIDEOS,
+                    payload: res
+                })
+            })
     };
 };
 
-export const UpdateShippingAddress = (shippingId, locationId, type) => {
+export const GetFrames = (file_name, time_in_video) => {
+    const requestData = {
+        url: `/videofiles/${file_name}/frames/${time_in_video}`,
+        method: "GET",
+        file_name,
+        time_in_video,
+    };
+
     return dispatch => {
-        return dispatch({
-            type: CONSTS.UPDATE_SHIPPING_ADDRESS,
-            payload: { locationId, shippingId, type }
-        })
+        return requestFramesFiles(requestData)
+            .then((res) => {
+                return res;
+            })
     };
 };
 
-export const UpdateSelectedShipping = (locationId) => {
+export const SaveFrames = (data) => {
+    const requestData = {
+        url: `saved_frames/new_frame`,
+        method: "POST",
+        data,
+    };
+
     return dispatch => {
-        return dispatch({
-            type: CONSTS.UPDATE_SELECTED_SHIPPING,
-            payload: locationId
-        })
+        return requestSaveFrame(requestData)
+            .then((res) => {
+                res && dispatch({
+                    type: CONSTS.SAVE_FRAME,
+                    payload: res
+                })
+            })
+    };
+};
+
+export const GetSaveFrames = (data) => {
+    const requestData = {
+        url: `saved_frames`,
+        method: "POST",
+        data,
+    };
+
+    return dispatch => {
+        return requestSaveFrames(requestData)
+            .then((res) => {
+                res && dispatch({
+                    type: CONSTS.GET_SAVE_FRAME,
+                    payload: res
+                })
+            })
     };
 };

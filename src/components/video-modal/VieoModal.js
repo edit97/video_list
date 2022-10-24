@@ -1,31 +1,61 @@
+//Packages
 import {connect} from "react-redux";
-import {useEffect} from "react";
+import {useState} from "react";
 
-import './video-list.css';
+//styles
+import './video-modal.css';
 
+//utils
 import {mapStateToProps} from "../../redux/mapStateToProps";
-import {GetVideos} from "../../redux/actions";
+import {GetFrames, SaveFrames} from "../../redux/actions";
 
-function VideoList(props) {
-    const {videos} = props
-    useEffect(() => {
-        props.GetVideos()
-    }, [])
+//Components
+import Modal from "react-bootstrap/Modal";
+import {Button} from "react-bootstrap";
+import Player from "./player/Player";
+import Frames from "./frames/Frames";
 
-    return (
-        <div className="video_list">
+function VideoModal(props) {
+    const {show, handleClose, video} = props
+    const [frames, setFrames] = useState(null)
+    const [selectedFrames, setSelectedFrames] = useState([])
+
+    const getFramesData = (data) => {
+        setFrames(data)
+    }
+
+    const selectFrame = (item) => {
+        let newList = selectedFrames.includes(item)
+            ? selectedFrames.filter(i => i.id !== item.id) : [...selectedFrames, item]
+        setSelectedFrames(newList)
+    }
+
+    const closeModal = () => {
+        handleClose()
+        setFrames(null)
+        setSelectedFrames([])
+    }
+
+    const saveFrames = () => {
+        props.SaveFrames(selectedFrames)
+        closeModal()
+    }
+
+    return <Modal show={show} onHide={closeModal} size="lg">
+        <Modal.Header closeButton/>
+        <Modal.Body>
             {
-                !!videos?.length && videos.map(item => {
-                    return <div style={{padding: '20px'}}
-                                key={item.id}
-                                className={'list_item'}>
-                        {item?.name}
-                    </div>
-                })
+                !frames ? <Player video={video} getFramesData={getFramesData}/>
+                    : <Frames frames={frames} selectedFrames={selectedFrames} selectFrame={selectFrame}/>
             }
-        </div>
-    );
+        </Modal.Body>
+        {frames && <Modal.Footer>
+            <Button variant="secondary" onClick={saveFrames}>
+                Save Changes
+            </Button>
+        </Modal.Footer>}
+    </Modal>;
 }
 
-const mapDispatchToProps = {GetVideos}
-export default connect(mapStateToProps, mapDispatchToProps)(VideoList)
+const mapDispatchToProps = {GetFrames, SaveFrames}
+export default connect(mapStateToProps, mapDispatchToProps)(VideoModal)
